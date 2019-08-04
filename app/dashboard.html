@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+  <head>
+   <link rel="stylesheet" href="https://cdn.metroui.org.ua/v4/css/metro-all.min.css">
+   <script src="https://code.jquery.com/jquery-3.3.1.min.js" onload="window.$ = window.jQuery = module.exports;"></script>
+   <script src="https://cdn.metroui.org.ua/v4/js/metro.min.js"></script>
+  </head>
+  <body>
+    <aside class="sidebar pos-absolute z-2"
+       data-role="sidebar"
+       data-toggle="#sidebar-toggle-4"
+       id="sb4"
+       data-shift=".shifted-content-2"
+       data-static-shift=".shifted-content-2"
+       data-static="md">
+        <div class="sidebar-header" data-image="images/sb-bg-1.jpg">
+            <div class="avatar">
+                <img data-role="gravatar" data-email="sergey@pimenov.com.ua">
+            </div>
+            <span class="title fg-white">Metro 4 Components Library</span>
+            <span class="subtitle fg-white"> 2018 © Sergey Pimenov</span>
+        </div>
+        <ul class="sidebar-menu">
+            <li><a><span class="mif-home icon"></span>Home</a></li>
+            <li><a><span class="mif-books icon"></span>Guide</a></li>
+            <li><a><span class="mif-files-empty icon"></span>Examples</a></li>
+            <li class="divider"></li>
+            <li><a><span class="mif-images icon"></span>Icons</a></li>
+        </ul>
+    </aside>
+    <div class="shifted-content-2 h-100 p-ab">
+        <div class="appbar pos-absolute bg-red z-1" data-role="appbar">
+          <div class="w-100">
+              <div class="float-right">
+                      <a class="button text-bold dropdown-toggle mr-15">(User name)</a>
+                      <ul class="d-menu" data-role="dropdown">
+                          <li><a href="#">Windows 10</a></li>
+                          <li><a href="#">Office 365</a></li>
+                          <li class="divider bg-lightGray"></li>
+                          <li><a href="#">Skype</a></li>
+                      </ul>
+              </div>
+          </div>
+        </div>
+
+        <div class="h-100 p-4">
+            <p class="h1">What is Lorem Ipsum?</p>
+            <p>
+                Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                Lorem Ipsum has been the industry's standard dummy text ever since the 1500s...
+            </p>
+        </div>
+    </div>
+  </body>
+</html>

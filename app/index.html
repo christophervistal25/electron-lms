@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+  <head>
+   <link rel="stylesheet" href="https://cdn.metroui.org.ua/v4/css/metro-all.min.css">
+   <script src="https://code.jquery.com/jquery-3.3.1.min.js" onload="window.$ = window.jQuery = module.exports;"></script>
+   <script src="https://cdn.metroui.org.ua/v4/js/metro.min.js"></script>
+    <style>
+        .login-form {
+            width: 350px;
+            height: auto;
+            top: 50%;
+            margin-top: -160px;
+        }
+    </style>
+  </head>
+  <body class="h-vh-100 bg-brandColor2">
+    <form class="login-form bg-white p-6 mx-auto border bd-default win-shadow">
+        <span class="mif-vpn-lock mif-4x place-right" style="margin-top: -10px;"></span>
+        <h2 class="text-light">Login to <b>LMS</b></h2>
+        <hr class="thin mt-4 mb-4 bg-white">
+        <div class="form-group">
+            <input type="text" data-role="input"  data-prepend="<span class='mif-envelop'>" id="username" placeholder="Enter your username...">
+        </div>
+        <div class="form-group">
+            <input type="password" id="password" data-role="input"  data-prepend="<span class='mif-key'>" placeholder="Enter your password...">
+        </div>
+        <div class="form-group mt-10">
+            <button class="button text-bold" type="submit">Sign In</button>
+        </div>
+    </form>
+     <script>
+      const electron        = require('electron');
+      const { dialog }      = electron.remote;
+      const { ipcRenderer } = electron;
+      const bcrypt          = require('bcryptjs');
+      const salt            = bcrypt.genSaltSync(10);
+      const sqlite3         = require('sqlite3').verbose();
+      let db                = new sqlite3.Database('app/database/lms.sqlite');
+
+      let form  = document.querySelector('form');
+      let users = [];
+
+      const displayDialog = (options = {}) => {
+        return dialog.showMessageBox(options, i => {});;
+      };
+
+      const getUsers = async () => {
+        let data = new Promise((resolve,reject) => db.each('SELECT username FROM super_admins', (err, data) =>  resolve(data.username) ));
+        let result = await data;
+        users.push(result);
+      }
+
+      const verifyUser = (username,password) => {
+        db.serialize(() => {
+            db.each(`SELECT id,password FROM super_admins WHERE username = '${username}'`, (err, user) => {
+                bcrypt.compare(password, user.password).then((res) => {
+                    if ( res ) {
+                      ipcRenderer.send('auth:success', { id : user.id });
+                      db.close();
+                    } else {
+                      displayDialog({type: 'error', buttons: ['OK'], message: 'Please check your username or password.'});
+                    }
+                });
+            });
+        });
+      };
+
+      // Get all usernames in database.
+      getUsers();
+
+      form.addEventListener('submit', function(e) {
+          e.preventDefault();
+          let username = document.querySelector('#username').value;
+          let password = document.querySelector('#password').value;
+
+          if ( users.includes(username) ) {
+              verifyUser(username, password);
+          } else {
+             displayDialog({type: 'error', buttons: ['OK'], message: 'Please check your username or password.'});
+          }
+      });
+
+    </script>
+  </body>
+</html>
